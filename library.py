@@ -95,7 +95,7 @@ class KeyValueStore(object):
     ###########################################
     #TODO: Implement __init__ Function
     ###########################################
-    ""
+    
     self.stringDict = {}
 
   def GetValue(self, key, max_age_in_sec=None):
@@ -127,16 +127,11 @@ class KeyValueStore(object):
       key: string. The name of the value to store.
       value: string. A value to store.
     """
-
-    ###########################################
-    #TODO: Implement StoreValue Function
-    ###########################################
-
+    self.stringDict[key] = value; 
     
 
   def Keys(self):
     """Returns a list of all keys in the datastore."""
 
-    ###########################################
-    #TODO: Implement Keys Function
-    ###########################################
+    keys = self.stringDict.keys()
+    return keys
