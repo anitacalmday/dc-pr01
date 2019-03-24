@@ -113,10 +113,11 @@ class KeyValueStore(object):
     """
     # Check if we've ever put something in the cache.
 
-    ###########################################
-    #TODO: Implement GetValue Function
-    ###########################################
-    self.stringDict{}
+    if key in self.stringDict: 
+      return self.stringDict[key]
+    else: 
+      return None
+    
 
 
   def StoreValue(self, key, value):
