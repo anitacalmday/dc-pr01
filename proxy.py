@@ -55,8 +55,14 @@ def CheckCachedResponse(command_line, cache):
 
   # GET commands can be cached.
   if cmd == "GET": 
-    cache.GetValue(name)
+    return cache.GetValue(name)
+  else: 
+    result = ForwardCommandToServer(cmd, SERVER_ADDRESS, SERVER_PORT)
+    cache.StoreValue(name, text)
+    return result 
 
+  if cmd == "DUMP": 
+    ForwardCommandToServer(cmd, SERVER_ADDRESS, SERVER_PORT)
   
 
 def ProxyClientCommand(sock, server_addr, server_port, cache):
@@ -76,9 +82,8 @@ def ProxyClientCommand(sock, server_addr, server_port, cache):
   """
 
   command_line = library.ReadCommand(sock)
-  CheckCachedResponse(command_line, cache)
-  
-
+  res = CheckCachedResponse(command_line, cache)
+  sock.sendall(res)
 
 
 

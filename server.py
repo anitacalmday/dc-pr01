@@ -31,6 +31,7 @@ Connection closed by foreign host.
 # to Python 3. (They're also good changes to the language!)
 from __future__ import absolute_import, division, print_function
 import csv
+import io
 # A few commands are used by both the server and the proxy server. Those
 # functions are in library.py.
 import library
@@ -58,7 +59,7 @@ def PutCommand(name, text, database):
   #TODO: Implement PUT function
   ##########################################
   database.StoreValue(name, text)
-  print("name:  " + name + "text:  " + text)
+  return name + " = " + text
 
 def GetCommand(name, database):
   """Handle the GET command for a server.
@@ -72,8 +73,7 @@ def GetCommand(name, database):
     A human readable string describing the result. If there is an error,
     then the string describes the error.
   """
-  database.GetValue(name)
-  print("name: " + name)
+  return database.GetValue(name) 
 
 
 def DumpCommand(database):
@@ -89,10 +89,11 @@ def DumpCommand(database):
   """
   keys = database.Keys()
   if len(keys) == 0: 
-    print("There are no keys to display.")
-  out  = csv.writer(open("keys.csv", "w"), delimiter = ',', quoting = csv.QUOTE_ALL)
-  out.writerow(keys)
-  return out
+    return "There are no keys to display."
+  out = io.BytesIO()
+  writer = csv.writer(out)
+  writer.writerow(keys)
+  return out.getvalue()
   
 def SendText(sock, text):
   """Sends the result over the socket along with a newline."""
@@ -127,7 +128,7 @@ def main():
       SendText(client_sock, 'Unknown command %s' % command)
 
     SendText(client_sock, result)
-
+    
     # We're done with the client, so clean up the socket.
 
     #################################

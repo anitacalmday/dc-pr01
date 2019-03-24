@@ -24,7 +24,7 @@ COMMAND_BUFFER_SIZE = 256
 
 def CreateServerSocket(port):
   serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  host = socket.gethostname()
+  host = socket.gethostbyname('localhost')
   serverSocket.bind((host,port))
   return serverSocket
 
@@ -50,7 +50,7 @@ def ReadCommand(sock):
   """Read a single command from a socket. The command must end in newline."""
    
   data = sock.recv(COMMAND_BUFFER_SIZE)
-  if data.endswith("\n"):
+  if data.endswith('\n'):
     return data
   else: 
     raise ValueError("Command does not end in newline.")
