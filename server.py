@@ -1,7 +1,7 @@
 """A server to store and retrieve key/value pairs using a socket interface.
 
 Once it's running on your machine, you can test it by connecting to it
-with a socket. "telent" is a unix program that allows unencrypted socket
+with a socket. "telnet" is a unix program that allows unencrypted socket
 communication from the command line. Localhost is the name of the IPv4 address
 127.0.0.1. The second telnet command is the port.
 
@@ -29,14 +29,11 @@ Connection closed by foreign host.
 
 # This code uses Python 2.7. These imports make the 2.7 code feel a lot closer
 # to Python 3. (They're also good changes to the language!)
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
+from __future__ import absolute_import, division, print_function
+import csv
 # A few commands are used by both the server and the proxy server. Those
 # functions are in library.py.
 import library
-
 
 # The port that we accept connections on. (A.k.a. "listen" on.)
 LISTENING_PORT = 7777
@@ -60,7 +57,8 @@ def PutCommand(name, text, database):
   ##########################################
   #TODO: Implement PUT function
   ##########################################
-
+  database.StoreValue(name, text)
+  print("name:  " + name + "text:  " + text)
 
 def GetCommand(name, database):
   """Handle the GET command for a server.
@@ -74,9 +72,8 @@ def GetCommand(name, database):
     A human readable string describing the result. If there is an error,
     then the string describes the error.
   """
-  ##########################################
-  #TODO: Implement GET function
-  ##########################################
+  database.GetValue(name)
+  print("name: " + name)
 
 
 def DumpCommand(database):
@@ -90,18 +87,16 @@ def DumpCommand(database):
     A human readable string describing the result. If there is an error,
     then the string describes the error.
   """
-
-  ##########################################
-  #TODO: Implement DUMP function
-  ##########################################
+  keys = database.Keys()
+  if len(keys) == 0: 
+    print("There are no keys to display.")
+  out  = csv.writer(open("keys.csv", "w"), delimiter = ',', quoting = csv.QUOTE_ALL)
+  out.writerow(keys)
+  return out
   
- 
-
-
 def SendText(sock, text):
   """Sends the result over the socket along with a newline."""
   sock.send('%s\n' % text)
-
 
 def main():
   # Store all key/value pairs in here.
@@ -138,7 +133,6 @@ def main():
     #################################
     #TODO: Close socket's connection
     #################################
-    
-
+    client_sock.close()
 
 main()

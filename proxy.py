@@ -10,9 +10,7 @@ server. The server is at `SERVER_ADDRESS`:`SERVER_PORT` below.
 
 # This code uses Python 2.7. These imports make the 2.7 code feel a lot closer
 # to Python 3. (They're also good changes to the language!)
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 
 import library
 
@@ -40,28 +38,26 @@ def ForwardCommandToServer(command, server_addr, server_port):
   Returns:
     A single line string response with no newlines.
   """
-
-  ###################################################
-  #TODO: Implement Function: WiP
-  ###################################################
-
-
-
+  client_sock = library.CreateClientSocket(server_addr, server_port)
+  client_sock.sendall(command)
+  data = client_sock.recv(library.COMMAND_BUFFER_SIZE)
+  client_sock.close()
+  data.replace("\n", "")
+  return data
+  
 def CheckCachedResponse(command_line, cache):
   cmd, name, text = library.ParseCommand(command_line)
 
   # Update the cache for PUT commands but also pass the traffic to the server.
-  ##########################
-  #TODO: Implement section
-  ##########################
+  if cmd == "PUT": 
+    cache.StoreValue(name, text)
+    ForwardCommandToServer(cmd, SERVER_ADDRESS, SERVER_PORT)
 
   # GET commands can be cached.
+  if cmd == "GET": 
+    cache.GetValue(name)
 
-  ############################
-  #TODO: Implement section
-  ############################
   
-
 
 def ProxyClientCommand(sock, server_addr, server_port, cache):
   """Receives a command from a client and forwards it to a server:port.
@@ -79,9 +75,9 @@ def ProxyClientCommand(sock, server_addr, server_port, cache):
       the server.
   """
 
-  ###########################################
-  #TODO: Implement ProxyClientCommand
-  ###########################################
+  command_line = library.ReadCommand(sock)
+  CheckCachedResponse(command_line, cache)
+  
 
 
 
@@ -102,6 +98,6 @@ def main():
   #################################
   #TODO: Close socket's connection
   #################################
-
+  client_sock.close()
 
 main()

@@ -127,7 +127,7 @@ class KeyValueStore(object):
       key: string. The name of the value to store.
       value: string. A value to store.
     """
-    self.stringDict[key] = value; 
+    self.stringDict[key] = value
     
 
   def Keys(self):
