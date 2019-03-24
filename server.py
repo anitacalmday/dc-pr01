@@ -73,7 +73,12 @@ def GetCommand(name, database):
     A human readable string describing the result. If there is an error,
     then the string describes the error.
   """
-  return database.GetValue(name) 
+
+  data = database.GetValue(name) 
+  if data: 
+    return data
+  else: 
+    return "key not found"
 
 
 def DumpCommand(database):

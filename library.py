@@ -23,6 +23,14 @@ import time
 COMMAND_BUFFER_SIZE = 256
 
 def CreateServerSocket(port):
+  """Creates a socket that listens on a specified port.
+
+  Args:
+    port: int from 0 to 2^16. Low numbered ports have defined purposes. Almost
+        all predefined ports represent insecure protocols that have died out.
+  Returns:
+    An socket that implements TCP/IP.
+  """
   serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   host = socket.gethostbyname('localhost')
   serverSocket.bind((host,port))
