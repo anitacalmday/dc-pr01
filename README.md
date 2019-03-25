@@ -11,7 +11,7 @@ The server only permits commands such as GET PUT and DUMP in the request field f
 * PUT stores the key and a specified value on the server
 * DUMP lists all of the key value pairs contained in the server.
 
-#How To Run My Program: 
+# How To Run My Program: 
 
 * Install telnet
 * Ensure that your server/proxy server program is running. 
